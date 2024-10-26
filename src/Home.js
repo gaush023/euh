@@ -8,9 +8,11 @@ function Home() {
       <ul>
         <li><a href="/login">ログイン</a></li>
         <li><a href="/signup">サインアップ</a></li>
-        <li><a href="/profile">プロフィール</a></li>
+        <li><a href="/dashboard">dashborad</a></li>
         <li><a href="/recommendations">おすすめ</a></li>
         <li><a href="/chat">トーク</a></li>
+        <li><a href="/profile">プロフィ-ル</a></li>
+
       </ul>
     </div>
   );
