@@ -7,6 +7,10 @@ import Dashboard from './Dashboard';
 import Profile from './Profile';
 import NewPost from './Newpost';
 import AllPosts from './Allposts';
+import Question from './Question';
+import QuestionDetails from './QuestionDetails';
+import Answer from './Answer';
+import Osusume from './Osusume';
 
 function App() {
   return (
@@ -19,6 +23,10 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/newpost" element={<NewPost />}/>
         <Route path="/allposts" element={<AllPosts />}/>
+        <Route path="/questions" element={<Question />}/>
+        <Route path="/answer" element={<Answer />}/>
+        <Route path="/osusume" element={<Osusume />}/>
+        <Route path="/questiondetail" element={<QuestionDetails />} />     
       </Routes>
     </Router>
   );
