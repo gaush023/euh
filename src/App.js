@@ -7,6 +7,7 @@ import Dashboard from './Dashboard';
 import Profile from './Profile';
 import NewPost from './Newpost';
 import AllPosts from './Allposts';
+import Chat from './Chat';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/newpost" element={<NewPost />}/>
         <Route path="/allposts" element={<AllPosts />}/>
+        <Route path="/Chat" element={<Chat />}/>
       </Routes>
     </Router>
   );
