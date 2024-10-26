@@ -12,7 +12,7 @@ const Login = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       console.log('User logged in:', userCredential.user);
-      // 成功時の処理
+     //  navigate('/dashboard');
     } catch (error) {
       setError(error.message);
     }
