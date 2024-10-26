@@ -11,6 +11,7 @@ import Question from './Question';
 import QuestionDetails from './QuestionDetails';
 import Answer from './Answer';
 import Osusume from './Osusume';
+import Chat from './Chat';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/answer" element={<Answer />}/>
         <Route path="/osusume" element={<Osusume />}/>
         <Route path="/questiondetail" element={<QuestionDetails />} />     
+        <Route path="/Chat" element={<Chat />}/>
       </Routes>
     </Router>
   );
