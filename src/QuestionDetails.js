@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { db } from './firebase';
 import { useParams } from 'react-router-dom';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import Answer from './Answer';
 
 function QuestionDetails() {
@@ -12,13 +12,16 @@ function QuestionDetails() {
     useEffect(() => {
         const fetchQuestionAndAnswers = async () => {
             try {
-                console.log("Fetching question with ID:", id); // Debug log for ID
-                const questionSnapshot = await getDocs(collection(db, 'Questions'));
-                const questionData = questionSnapshot.docs.find(doc => doc.id === id)?.data();
-                setQuestion(questionData);
-
-                if (questionData) {
+                console.log("Fetching question with ID:", id);
+                
+                // 特定のIDの質問を取得
+                const questionDoc = await getDoc(doc(db, 'Questions', id));
+                if (questionDoc.exists()) {
+                    const questionData = questionDoc.data();
+                    setQuestion(questionData);
                     console.log("Question found:", questionData);
+
+                    // 質問に関連する回答を取得
                     const answersQuery = query(collection(db, 'Answers'), where('questionId', '==', id));
                     const answersSnapshot = await getDocs(answersQuery);
                     setAnswers(answersSnapshot.docs.map(doc => doc.data()));
@@ -29,8 +32,18 @@ function QuestionDetails() {
                 console.error("Error fetching data:", error);
             }
         };
+
         fetchQuestionAndAnswers();
-    }, [id]);
+
+        // 5秒後にデバッグメッセージを表示
+        const timer = setTimeout(() => {
+            if (!question) {
+                console.warn("Debug: Question still loading after 5 seconds.");
+            }
+        }, 5000);
+
+        return () => clearTimeout(timer); // Cleanup timer on component unmount
+    }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div>
