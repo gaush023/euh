@@ -34,19 +34,23 @@ function QuestionDetails({ userId }) { // userId を受け取る
     fetchQuestionAndAnswers();
   }, [id]);
 
-  const handleEvaluateAnswer = async (answerId, evaluation) => {
-    try {
-      const answerRef = doc(db, 'Answers', answerId);
-      await updateDoc(answerRef, { evaluation, evaluatedBy: userId }); // 評価者のIDも保存
-      setAnswers(prevAnswers =>
-        prevAnswers.map(answer =>
-          answer.id === answerId ? { ...answer, evaluation, evaluatedBy: userId } : answer
-        )
+const handleEvaluateAnswer = async (answerId, evaluation) => {
+  try {
+    const answerRef = doc(db, 'Answers', answerId);
+    await updateDoc(answerRef, { evaluation, evaluatedBy: userId }); // 評価者のIDも保存
+    console.log(`評価が保存されました: ${evaluation}, by ${userId}`); // デバッグ用ログ
+
+    setAnswers(prevAnswers => {
+      const updatedAnswers = prevAnswers.map(answer =>
+        answer.id === answerId ? { ...answer, evaluation, evaluatedBy: userId } : answer
       );
-    } catch (error) {
-      console.error("Error updating evaluation:", error);
-    }
-  };
+      console.log("Updated Answers:", updatedAnswers); // デバッグ用ログ
+      return updatedAnswers;
+    });
+  } catch (error) {
+    console.error("Error updating evaluation:", error);
+  }
+};
 
   if (loading) return <p>Loading...</p>;
 
