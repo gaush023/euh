@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from './firebase'; 
 import { useNavigate } from 'react-router-dom';
+import './Signup.css';
+import logo from './Full Logo.png';  // Update the path to your image file
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -32,28 +34,36 @@ const SignUp = () => {
   };
 
   return (
-    <div>
-      <h2>Sign Up</h2>
-      {error && <p>{error}</p>}
-      <form onSubmit={handleSignUp}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Sign Up</button>
-      </form>
-      <hr />
-      <button onClick={handleGoogleSignIn}>Sign Up with Google</button>
+    <div className="signup-container">
+      <img src={logo} alt="BlueMoon Logo" className="logo" /> {/* Added logo */}
+      <div className="message-box">
+        <h1>A place of warmth</h1>
+      </div>
+      <div className="signup-box">
+        <h2>Sign Up</h2>
+        {error && <p className="error">{error}</p>}
+        <form onSubmit={handleSignUp}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="input-field"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="input-field"
+          />
+          <button type="submit" className="signup-button">Sign Up</button>
+        </form>
+        <hr />
+        <button onClick={handleGoogleSignIn} className="google-button">Sign Up with Google</button>
+      </div>
     </div>
   );
 };
