@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from './firebase'; 
 import { useNavigate } from 'react-router-dom';
-
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -15,6 +14,17 @@ const SignUp = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       console.log('User registered:', userCredential.user);
+      navigate('/dashboard');
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const userCredential = await signInWithPopup(auth, provider);
+      console.log('User logged in with Google:', userCredential.user);
       navigate('/dashboard');
     } catch (error) {
       setError(error.message);
@@ -42,6 +52,8 @@ const SignUp = () => {
         />
         <button type="submit">Sign Up</button>
       </form>
+      <hr />
+      <button onClick={handleGoogleSignIn}>Sign Up with Google</button>
     </div>
   );
 };
