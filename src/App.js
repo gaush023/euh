@@ -23,10 +23,13 @@ import MyQuestions from './MyQuestions';
 import MatchedUsers from './MatchedUsers';
 
 
+ 
+ 
+ 
 function App() {
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
-
+ 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -52,11 +55,11 @@ function App() {
       console.error('回答の保存に失敗しました:', error);
     }
   };
-
+ 
   if (loading) {
     return <p>Loading...</p>;
   }
-
+ 
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -79,5 +82,6 @@ function App() {
     </Routes>
   );
 }
-
+ 
+ 
 export default App;
