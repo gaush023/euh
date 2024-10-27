@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { db } from './firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
-function ThreeChoiceQuestion({ onAnswerSubmit }) {
+function ThreeChoiceQuestion({ userId, onAnswerSubmit }) { // userIdを受け取る
   const [question, setQuestion] = useState(null); // ランダムに選んだ1つの質問を保存
   const [selectedAnswer, setSelectedAnswer] = useState(''); // ユーザーの選択を保存
   const navigate = useNavigate(); // navigate フックを使用して画面遷移
@@ -33,10 +33,26 @@ function ThreeChoiceQuestion({ onAnswerSubmit }) {
     setSelectedAnswer(choice);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onAnswerSubmit({ [question.id]: selectedAnswer }); // 親コンポーネントに回答を渡す
-    navigate('/osusume'); 
+    if (!userId) {
+      console.error("ユーザーIDが無効です");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, 'UserAnswers'), {
+        userId: userId,  // ログイン中のユーザーID
+        questionId: question.id,
+        answer: selectedAnswer,
+        submittedAt: new Date(),
+      });
+      console.log('回答が保存されました');
+      onAnswerSubmit(selectedAnswer); // 上位コンポーネントに回答を通知
+      navigate('/osusume'); // 回答後に遷移
+    } catch (error) {
+      console.error('回答の保存に失敗しました:', error);
+    }
   };
 
   return (

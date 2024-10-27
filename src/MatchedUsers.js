@@ -8,13 +8,24 @@ function MatchedUsers({ userId }) {
 
   useEffect(() => {
     const fetchMatches = async () => {
+      console.log(`Fetching matches for userId: ${userId}`);
       try {
         const q = query(collection(db, 'UserMatches'), where('userId', '==', userId));
         const matchSnapshot = await getDocs(q);
+        
+        if (matchSnapshot.empty) {
+          console.log('No matches found for this user.');
+        } else {
+          console.log('Matches found:', matchSnapshot.size);
+        }
+
+        // マッチデータを配列に変換
         const matchData = matchSnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         }));
+        console.log('Fetched match data:', matchData);
+
         setMatches(matchData);
       } catch (error) {
         console.error('マッチデータの取得エラー:', error);

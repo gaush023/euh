@@ -3,7 +3,7 @@ import { db } from './firebase';
 import { useParams } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 
-function QuestionDetails() {
+function QuestionDetails({ userId }) { // userId を受け取る
   const { id } = useParams();
   const [question, setQuestion] = useState(null);
   const [answers, setAnswers] = useState([]);
@@ -37,10 +37,10 @@ function QuestionDetails() {
   const handleEvaluateAnswer = async (answerId, evaluation) => {
     try {
       const answerRef = doc(db, 'Answers', answerId);
-      await updateDoc(answerRef, { evaluation });
+      await updateDoc(answerRef, { evaluation, evaluatedBy: userId }); // 評価者のIDも保存
       setAnswers(prevAnswers =>
         prevAnswers.map(answer =>
-          answer.id === answerId ? { ...answer, evaluation } : answer
+          answer.id === answerId ? { ...answer, evaluation, evaluatedBy: userId } : answer
         )
       );
     } catch (error) {
@@ -68,6 +68,7 @@ function QuestionDetails() {
                   nope
                 </button>
                 <p>評価: {answer.evaluation || '未評価'}</p>
+                <p>評価者: {answer.evaluatedBy || '未評価'}</p> {/* 評価者のIDも表示 */}
               </li>
             ))}
           </ul>
