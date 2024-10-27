@@ -76,7 +76,7 @@ function App() {
       <Route path="/osusume" element={<Osusume />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/addthreequestions" element={<AddThreeChoiceQuestions />} />
-      <Route path="/threechoice" element={<ThreeChoiceQuestion onAnswerSubmit={handleAnswerSubmit} />} />
+      <Route path="/threechoice" element={<ThreeChoiceQuestion userId={userId} onAnswerSubmit={handleAnswerSubmit} />} />
       <Route path="/matches" element={<MatchedUsers userId={userId} />} />
     </Routes>
   );
