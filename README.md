@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# サンプル（プロダクト名）
+Blue Moon
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![IMAGE ALT TEXT HERE](https://jphacks.com/wp-content/uploads/2024/07/JPHACKS2024_ogp.jpg)](https://www.youtube.com/watch?v=DZXUkEj-CSI)
 
-## Available Scripts
+## 製品概要
+他者の外見ではなく内面を重要視したSNS兼マッチングアプリ
 
-In the project directory, you can run:
+### 背景(製品開発のきっかけ、課題等）
+マッチングアプリやSNSなどはプロフィール写真が掲載されているが、相手の外見だけでその人の性格などに先入観を持ってしまうことは、繋がりを求めてSNSを使用しているユーザーにとって悪影響であると感じた。そしてお互いの外見を排除したプラットフォームを提供することで、互いの内面を深く理解できることにつながると考えたためBlue Moonの開発に至った。
 
-### `npm start`
+### 製品説明（具体的な製品の説明）
+互いの顔を隠したチャット機能はもちろん、質問を通じて同じ価値観を持っている仲間とマッチングする機能を持ったWEBアプリケーションです。
+### 特長
+#### 1. 特長1
+#### 2. 特長2
+#### 3. 特長3
+#### 1. プロフィール写真など外見は一切見えない
+#### 2. 共通の趣味を持つ仲間を簡単に見つけることができる
+#### 3. 質問を通じて同じ価値観・考え方を持つ他社とのマッチング機能
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 解決出来ること
+ユーザー同士は外見による先入観・偏見を持つことがなくなります。
+### 今後の展望
+外見の要素を排除しつつも文字だけで自分なりのアイデンティティを表現できるようなアプリへと昇華させたい。
+### 注力したこと（こだわり等）
+* 
+* マッチング機能に使われる質問は自分で考えられるようにして、自分と同じ価値観を持つ仲間を探しやすいようにしたこと。またこれはマッチング率を上昇させる目的としても特に力を入れた部分である。
+* 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 開発技術
+### 活用した技術
+#### API・データ
+### 活用した技術　HTML　CSS Javascript Firebase
+#### API・データ Windows
+* 
+* 
 
-### `npm test`
+@@ -27,10 +34,11 @@
+* 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### デバイス
+* 
+* Mac 
+* 
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 独自技術
+#### ハッカソンで開発した独自機能・技術
+* 独自で開発したものの内容をこちらに記載してください
+* 特に力を入れた部分をファイルリンク、またはcommit_idを記載してください。
+* 質問とマッチング機能
+* https://vscode.dev/github/gaush023/euh/blob/main/src/Question.js
+* https://vscode.dev/github/gaush023/euh/blob/main/src/MatchedUsers.js
