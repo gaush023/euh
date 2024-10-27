@@ -4,16 +4,26 @@ import { db } from './firebase';
 
 export async function checkMutualLike(fromUserId, toUserId) {
   try {
-    const likesQuery = query(
+    // fromUserId から toUserId への「いいね」を確認
+    const likeFromToQuery = query(
       collection(db, 'Likes'),
       where('fromUserId', '==', fromUserId),
       where('toUserId', '==', toUserId)
     );
+    const likeFromToSnapshot = await getDocs(likeFromToQuery);
 
-    const querySnapshot = await getDocs(likesQuery);
-    return !querySnapshot.empty; // ドキュメントが存在すれば true を返す
+    // toUserId から fromUserId への「いいね」を確認
+    const likeToFromQuery = query(
+      collection(db, 'Likes'),
+      where('fromUserId', '==', toUserId),
+      where('toUserId', '==', fromUserId)
+    );
+    const likeToFromSnapshot = await getDocs(likeToFromQuery);
+
+    // 双方からの「いいね」が存在するかどうかを確認
+    return !likeFromToSnapshot.empty && !likeToFromSnapshot.empty;
   } catch (error) {
-    console.error('「いいね」の確認エラー:', error);
+    console.error('相互「いいね」の確認エラー:', error);
     return false;
   }
 }

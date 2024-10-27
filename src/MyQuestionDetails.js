@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { db } from './firebase';
 import { useParams } from 'react-router-dom';
-import { doc, getDoc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs, updateDoc, addDoc } from 'firebase/firestore';
 
 function QuestionDetails({ userId }) { // userId を受け取る
   const { id } = useParams();
@@ -34,23 +34,34 @@ function QuestionDetails({ userId }) { // userId を受け取る
     fetchQuestionAndAnswers();
   }, [id]);
 
-const handleEvaluateAnswer = async (answerId, evaluation) => {
-  try {
-    const answerRef = doc(db, 'Answers', answerId);
-    await updateDoc(answerRef, { evaluation, evaluatedBy: userId }); // 評価者のIDも保存
-    console.log(`評価が保存されました: ${evaluation}, by ${userId}`); // デバッグ用ログ
+  const handleEvaluateAnswer = async (answerId, evaluation) => {
+    try {
+      // Answersコレクション内の評価を更新
+      const answerRef = doc(db, 'Answers', answerId);
+      await updateDoc(answerRef, { evaluation, evaluatedBy: userId }); // 評価者のIDも保存
+      console.log(`評価が保存されました: ${evaluation}, by ${userId}`); // デバッグ用ログ
 
-    setAnswers(prevAnswers => {
-      const updatedAnswers = prevAnswers.map(answer =>
-        answer.id === answerId ? { ...answer, evaluation, evaluatedBy: userId } : answer
-      );
-      console.log("Updated Answers:", updatedAnswers); // デバッグ用ログ
-      return updatedAnswers;
-    });
-  } catch (error) {
-    console.error("Error updating evaluation:", error);
-  }
-};
+      // Likesコレクションにいいね情報を追加
+      await addDoc(collection(db, 'Likes'), {
+        answerId,
+        evaluation,
+        fromUserId: userId,
+        timestamp: new Date()
+      });
+      console.log(`評価がLikesコレクションに保存されました: ${evaluation}, by ${userId}`);
+
+      // ローカルのanswers stateを更新
+      setAnswers(prevAnswers => {
+        const updatedAnswers = prevAnswers.map(answer =>
+          answer.id === answerId ? { ...answer, evaluation, evaluatedBy: userId } : answer
+        );
+        console.log("Updated Answers:", updatedAnswers); // デバッグ用ログ
+        return updatedAnswers;
+      });
+    } catch (error) {
+      console.error("Error updating evaluation:", error);
+    }
+  };
 
   if (loading) return <p>Loading...</p>;
 

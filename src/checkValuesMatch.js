@@ -22,9 +22,9 @@ export async function checkValuesMatch(userAId, userBId) {
       const answerA = await getAnswerForQuestion(userAId, questionId);
       const answerB = await getAnswerForQuestion(userBId, questionId);
 
-      if (answerA !== answerB) return false; // 回答が一致しない場合は false を返す
+      if (answerA === answerB) return true; // 1つでも一致したら true を返す
     }
-    return true; // 全ての質問で一致
+    return false; // すべての質問で不一致だった場合は false
   } catch (error) {
     console.error('価値観の一致確認エラー:', error);
     return false;
