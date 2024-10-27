@@ -1,6 +1,5 @@
 # Blue Moon
 
-[![Blue Moon - JPHACKS2024](https://jphacks.com/wp-content/uploads/2024/07/JPHACKS2024_ogp.jpg)](https://www.youtube.com/watch?v=DZXUkEj-CSI)
 
 ## 製品概要
 **Blue Moon**は、他者の外見ではなく内面に焦点を当てたSNS兼マッチングアプリです。写真ではなく価値観や考え方で共感できる仲間との出会いをサポートします。
