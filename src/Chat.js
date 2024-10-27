@@ -1,26 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Chat = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]); // 送信したメッセージを保持する状態
+  const roomRef = useRef(null); // メッセージルームの参照
 
   const handleInputChange = (event) => {
     setMessage(event.target.value);
   };
 
   const handleSendMessage = () => {
-    if (message.trim() !== '') { 
-      setMessages([...messages, message]); // メッセージを配列に追加
+    if (message.trim() !== '') {
+      setMessages((prevMessages) => [...prevMessages, message]); // メッセージを配列に追加
       console.log('メッセージを送信:', message);
       setMessage(''); // 送信後に入力をクリア
     }
   };
 
+  useEffect(() => {
+    if (roomRef.current) {
+      roomRef.current.scrollTop = roomRef.current.scrollHeight; // スクロールを最下部に
+    }
+  }, [messages]);
+
   return (
     <div>
-      <div id="room">
+      <div
+        id="room"
+        ref={roomRef}
+        style={{ height: '300px', overflowY: 'auto', border: '1px solid #ccc', padding: '10px' }} // メッセージ表示領域のスタイル
+      >
         {/* 送信したメッセージを表示 */}
-        {messages.map((msg, index) => (
+        {messages.slice().reverse().map((msg, index) => (
           <div key={index} style={styles.messageBubble}>
             {msg}
           </div>
@@ -43,6 +54,7 @@ const Chat = () => {
             className="btn btn-primary"
             type="button"
             onClick={handleSendMessage}
+            disabled={message.trim() === ''} // 空メッセージのときはボタンを無効に
           >
             送信
           </button>

@@ -14,6 +14,8 @@ import Answer from './Answer';
 import Osusume from './Osusume';
 import Chat from './Chat';
 
+
+
 function App() {
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -52,5 +54,6 @@ function App() {
     </Routes>
   );
 }
+
 
 export default App;

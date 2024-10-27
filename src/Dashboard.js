@@ -11,6 +11,7 @@ function Dashboard() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true); // 読み込み状態
 
+    // ユーザーの認証状態を監視
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if (!user) {
@@ -20,6 +21,7 @@ function Dashboard() {
         return unsubscribe;
     }, [navigate]);
 
+    // Firestoreからユーザーを取得
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -35,11 +37,6 @@ function Dashboard() {
         fetchUsers();
     }, []);
 
-    const handleChat = (user) => {
-        console.log(`Chat with ${user.name}`); // 実際のチャット機能をここに追加
-        // チャット画面へのナビゲートなど
-    };
-
     return (
         <div className="dashboard">
             <h2 className="dashboard-header">ダッシュボード</h2>
@@ -52,9 +49,8 @@ function Dashboard() {
                 <div className="user-list">
                     {users.map((user) => (
                         <div key={user.id} className="user-card">
-                            <button onClick={() => handleChat(user)} className="user-button">
-                                {user.name}
-                            </button>
+                            {/* ボタンを削除し、ユーザー名を表示 */}
+                            <p className="user-name">{user.name}</p>
                             <p><strong>年齢:</strong> {user.age}</p>
                             <p><strong>興味:</strong> {user.interests.join(', ')}</p>
                         </div>
