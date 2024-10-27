@@ -13,13 +13,13 @@ import QuestionDetails from './QuestionDetails';
 import Answer from './Answer';
 import Osusume from './Osusume';
 import Chat from './Chat';
-
-
-
+ 
+ 
+ 
 function App() {
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
-
+ 
   useEffect(() => {
     // Firebase認証の状態を監視
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -30,14 +30,14 @@ function App() {
       }
       setLoading(false); // 認証チェックが終わったらローディングを終了
     });
-
+ 
     return () => unsubscribe(); // コンポーネントのアンマウント時に監視を解除
   }, []);
-
+ 
   if (loading) {
     return <p>Loading...</p>; // 認証状態が確認できるまでローディング表示
   }
-
+ 
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -54,6 +54,6 @@ function App() {
     </Routes>
   );
 }
-
-
+ 
+ 
 export default App;
