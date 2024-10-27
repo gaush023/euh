@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { getOrCreateChat } from './chatService'; 
 import { db } from './firebase';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
-import { getOrCreateChat } from './chatService';
-import { useNavigate } from 'react-router-dom';
-import './styles/MatchedUsers.css';
+import { useNavigate, Link } from 'react-router-dom';
+import './styles/ChatSidebar.css';
 
 async function getUserName(userId) {
   const userDoc = await getDoc(doc(db, 'users', userId));
   return userDoc.exists() ? userDoc.data().name : '不明';
 }
 
-function MatchedUsers({ userId }) {
+function ChatSidebar({ userId }) {
   const [matches, setMatches] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +24,7 @@ function MatchedUsers({ userId }) {
         const matchData = await Promise.all(matchSnapshot.docs.map(async (doc) => {
           const matchInfo = doc.data();
           const matchedUserName = await getUserName(matchInfo.matchedUserId);
-          return { ...matchInfo, matchedUserName };
+          return { matchedUserId: matchInfo.matchedUserId, matchedUserName };
         }));
 
         setMatches(matchData);
@@ -35,28 +36,36 @@ function MatchedUsers({ userId }) {
     fetchMatches();
   }, [userId]);
 
-  const handleStartChat = async (matchedUserId) => {
+  const handleChatClick = async (matchedUserId) => {
     try {
       const chatId = await getOrCreateChat(userId, matchedUserId);
+      setSelectedUserId(matchedUserId); // Update selected user ID
       navigate(`/chat/${chatId}`);
     } catch (error) {
-      console.error("チャットの開始エラー:", error);
+      console.error("チャットルームの取得または作成エラー:", error);
     }
   };
 
   return (
-    <div>
-      <h2>マッチしたユーザー</h2>
+    <div className="chat-sidebar">
+      <h2>Chats</h2>
       <ul>
-        {matches.map((match, index) => (
-          <li key={index}>
-            <p>マッチユーザー名: {match.matchedUserName}</p>
-            <button onClick={() => handleStartChat(match.matchedUserId)}>トークを開始</button>
+        {matches.map((match) => (
+          <li
+            key={match.matchedUserId}
+            className={match.matchedUserId === selectedUserId ? 'selected' : ''} 
+          >
+            <button onClick={() => handleChatClick(match.matchedUserId)}>
+              <h4>{match.matchedUserName}</h4>
+            </button>
           </li>
         ))}
       </ul>
+      <div className="osusume">
+        <Link to="/dashboard">back to dashboard</Link>
+      </div>
     </div>
   );
 }
 
-export default MatchedUsers;
+export default ChatSidebar;

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { db } from './firebase';
-import { useParams } from 'react-router-dom';
+import { useParams, Link} from 'react-router-dom';
 import { doc, getDoc, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
+import './styles/QuestionDetails.css';
 
 function QuestionDetails({ userId }) {
   const { id } = useParams();
   const [question, setQuestion] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [newAnswer, setNewAnswer] = useState("");
+  const [hasAnswered, setHasAnswered] = useState(false); // すでに回答済みかどうか
 
   useEffect(() => {
     const fetchQuestionAndAnswers = async () => {
@@ -15,7 +17,8 @@ function QuestionDetails({ userId }) {
         // 質問の取得
         const questionDoc = await getDoc(doc(db, 'Questions', id));
         if (questionDoc.exists()) {
-          setQuestion({ id: questionDoc.id, ...questionDoc.data() });
+          const questionData = questionDoc.data();
+          setQuestion({ id: questionDoc.id, ...questionData });
         }
 
         // 回答の取得
@@ -26,13 +29,17 @@ function QuestionDetails({ userId }) {
           ...doc.data()
         }));
         setAnswers(answersData);
+
+        // 現在のユーザーが回答済みかチェック
+        const userAnswer = answersData.find(answer => answer.answerOwnerId === userId);
+        if (userAnswer) setHasAnswered(true);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchQuestionAndAnswers();
-  }, [id]);
+  }, [id, userId]);
 
   const handleAnswerSubmit = async (e) => {
     e.preventDefault();
@@ -40,14 +47,24 @@ function QuestionDetails({ userId }) {
     if (!newAnswer.trim()) return;
 
     try {
+      // `userId` が既に回答済みの場合は投稿を中止
+      if (hasAnswered) {
+        console.log("すでに回答済みです。");
+        return;
+      }
+
+      // `userId` を `answerOwnerId` として Answers コレクションに新しい回答を追加
       await addDoc(collection(db, 'Answers'), {
         questionId: id,
-        userId: userId,
+        answerOwnerId: userId, // 回答者のIDとしてログインしているユーザーIDを保存
         answer: newAnswer,
-        createdAt: new Date(),
+        createdAt: new Date()
       });
+
       setNewAnswer(""); // 入力欄をクリア
-      // 新しい回答をリロード
+      setHasAnswered(true); // 回答済みフラグを設定
+
+      // 新しい回答を再取得
       const answersQuery = query(collection(db, 'Answers'), where('questionId', '==', id));
       const answersSnapshot = await getDocs(answersQuery);
       const answersData = answersSnapshot.docs.map(doc => ({
@@ -66,22 +83,21 @@ function QuestionDetails({ userId }) {
       {question ? (
         <>
           <h3>{question.question}</h3>
-          <h4>回答一覧</h4>
-          <ul>
-            {answers.map(answer => (
-              <li key={answer.id}>{answer.answer}</li>
-            ))}
-          </ul>
-          <form onSubmit={handleAnswerSubmit}>
-            <input
-              type="text"
-              value={newAnswer}
-              onChange={(e) => setNewAnswer(e.target.value)}
-              placeholder="回答を入力してください"
-              required
-            />
-            <button type="submit">回答を投稿</button>
-          </form>
+          {hasAnswered ? (
+            <p>この質問にはすでに回答しています。</p>
+          ) : (
+            <form onSubmit={handleAnswerSubmit}>
+              <input
+                type="text"
+                value={newAnswer}
+                onChange={(e) => setNewAnswer(e.target.value)}
+                placeholder="回答を入力してください"
+                required
+              />
+              <button type="submit">回答を投稿</button>
+            </form>
+          )}
+          <Link to="/osusume">Go back to matching page</Link>
         </>
       ) : (
         <p>質問が見つかりません</p>
