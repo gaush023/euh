@@ -1,68 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { db } from './firebase';
-import { useParams } from 'react-router-dom';
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
 
-function QuestionDetailAndAnswer() {
-    const { id } = useParams();
-    const [question, setQuestion] = useState(null);
-    const [answers, setAnswers] = useState([]);
-    const [answerText, setAnswerText] = useState('');
+function Answer({ questionId }) {
+  const [answerText, setAnswerText] = useState('');
+  const [message, setMessage] = useState('');
 
-    useEffect(() => {
-        const fetchQuestionAndAnswers = async () => {
-            const questionSnapshot = await getDocs(collection(db, 'Questions'));
-            setQuestion(questionSnapshot.docs.find(doc => doc.id === id)?.data());
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-            const answersQuery = query(collection(db, 'Answers'), where('questionId', '==', id));
-            const answersSnapshot = await getDocs(answersQuery);
-            setAnswers(answersSnapshot.docs.map(doc => doc.data()));
-        };
-        fetchQuestionAndAnswers();
-    }, [id]);
+    if (!questionId) {
+      console.error("質問IDが無効です。回答を投稿できません。");
+      setMessage("質問IDが無効です。回答を投稿できません。");
+      return;
+    }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await addDoc(collection(db, 'Answers'), {
-                questionId: id,
-                answer: answerText,
-                createdAt: new Date(),
-            });
-            setAnswerText('');
-            setAnswers([...answers, { answer: answerText, createdAt: new Date() }]);
-        } catch (error) {
-            console.error("エラー発生:", error);
-        }
-    };
+    try {
+      await addDoc(collection(db, 'Answers'), {
+        answer: answerText,
+        questionId: questionId,
+        createdAt: Timestamp.now(),
+      });
+      setAnswerText('');
+      setMessage('回答が投稿されました');
+    } catch (error) {
+      console.error('回答の投稿に失敗しました:', error);
+      setMessage('回答の投稿に失敗しました');
+    }
 
-    return (
-        <div>
-            {question && (
-                <>
-                    <h2>{question.question}</h2>
-                    <h3>回答一覧:</h3>
-                    <ul>
-                        {answers.map((answer, index) => (
-                            <li key={index}>{answer.answer}</li>
-                        ))}
-                    </ul>
-                    <div>
-                        <h3>回答を投稿する</h3>
-                        <form onSubmit={handleSubmit}>
-                            <textarea
-                                placeholder="回答を入力"
-                                value={answerText}
-                                onChange={(e) => setAnswerText(e.target.value)}
-                                required
-                            />
-                            <button type="submit">回答を投稿</button>
-                        </form>
-                    </div>
-                </>
-            )}
-        </div>
-    );
+    setTimeout(() => setMessage(''), 3000);
+  };
+
+  return (
+    <div>
+      <h3>回答を投稿</h3>
+      <form onSubmit={handleSubmit}>
+        <textarea
+          placeholder="回答を入力してください"
+          value={answerText}
+          onChange={(e) => setAnswerText(e.target.value)}
+          required
+        />
+        <button type="submit">投稿</button>
+      </form>
+      {message && <p>{message}</p>}
+    </div>
+  );
 }
 
-export default QuestionDetailAndAnswer;
+export default Answer;

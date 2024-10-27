@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { db } from './firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 
-function Question({ userId }) {
+function PostQuestion({ userId }) {
   const [questionText, setQuestionText] = useState('');
   const [message, setMessage] = useState('');
 
@@ -50,4 +50,4 @@ function Question({ userId }) {
   );
 }
 
-export default Question;
+export default PostQuestion;
